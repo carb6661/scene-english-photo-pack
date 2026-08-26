@@ -1,0 +1,6 @@
+interface:
+  display_name: "场景英语六图学习卡"
+  short_description: "用一张实景照片连续生成词汇、发音、短语、四六级与雅思六张学习图"
+  default_prompt: "Use $scene-english-photo-pack to turn my photo, scene description, and vocabulary list into six scattered-label bilingual learning images."
+policy:
+  allow_implicit_invocation: true
