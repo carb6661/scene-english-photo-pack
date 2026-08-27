@@ -8,26 +8,15 @@ from PIL import Image, ImageFilter
 import render_scatter_learning_cards as base
 
 
-LABEL_BOOST = 1.08
-DESCRIPTION_BOOST = 1.06
 DEFAULT_WIDTH = 2880
+LABEL_SCALE = 1.20
+BADGE_SCALE = 1.10
+DESCRIPTION_SCALE = 1.14
 
 
-_draw_stage_badge = base.draw_stage_badge
-_draw_label = base.draw_label
-_draw_description = base.draw_description
-
-
-def larger_stage_badge(layer, card, scale):
-    return _draw_stage_badge(layer, card, scale * LABEL_BOOST)
-
-
-def larger_label(layer, item, scale):
-    return _draw_label(layer, item, scale * LABEL_BOOST)
-
-
-def larger_description(layer, card, scale):
-    return _draw_description(layer, card, scale * DESCRIPTION_BOOST)
+def ensure_argument(flag: str, value: str) -> None:
+    if flag not in sys.argv:
+        sys.argv.extend([flag, value])
 
 
 def argument_value(flag: str) -> str | None:
@@ -45,11 +34,10 @@ def finalize_pngs(output_dir: Path) -> None:
 
 
 def main() -> None:
-    if "--width" not in sys.argv:
-        sys.argv.extend(["--width", str(DEFAULT_WIDTH)])
-    base.draw_stage_badge = larger_stage_badge
-    base.draw_label = larger_label
-    base.draw_description = larger_description
+    ensure_argument("--width", str(DEFAULT_WIDTH))
+    ensure_argument("--label-scale", str(LABEL_SCALE))
+    ensure_argument("--badge-scale", str(BADGE_SCALE))
+    ensure_argument("--description-scale", str(DESCRIPTION_SCALE))
     base.main()
     output = argument_value("--output-dir")
     if output:

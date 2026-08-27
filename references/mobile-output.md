@@ -4,15 +4,33 @@ Apply these requirements to every six-image pack.
 
 ## Label scale
 
-- The default renderer enlarges ordinary floating labels by 8% and the Card 6 description typography by 6% relative to the original scattered-label design.
-- Preserve compact patches, but prioritize comfortable reading on a 360-430 px-wide phone screen.
-- Short vocabulary labels should normally use `font_size` 25-30. Situational and CET phrases should normally use 21-25. IELTS sentence patches should normally use 18-22 and be shortened before shrinking further.
-- Use slightly more visual presence than the original compact design without merging separate labels.
-- If enlarged labels overlap or exceed the canvas, move them into another whitespace region, shorten the wording, or reduce item count. Do not disable the renderer's overlap and bounds checks.
+The mobile renderer applies these defaults relative to the base design:
+
+- floating labels: `1.20` scale;
+- page badge: `1.10` scale;
+- Card 6 description: `1.14` scale.
+
+Card 1 Chinese prompts use the full requested font size rather than a reduced translation size. Card 2 places IPA on its own line so vocabulary can remain large without creating an excessively wide strip.
+
+Recommended design-space sizes:
+
+- short Chinese or vocabulary labels: 27-34;
+- situational and CET phrases: 23-28;
+- IELTS sentence patches: 19-23;
+- model description: 22-25.
+
+Preview every result at 360-430 px wide. If text is hard to read, shorten the wording or remove the least useful item before reducing font size.
+
+## Collision safety
+
+- Keep at least a 12 px-derived safety gap around labels and the page badge.
+- Any touching or intersection counts as a collision.
+- Automatic placement searches near the requested anchor first.
+- Inspect moved labels for semantic proximity to their objects; automatic geometry cannot determine the best referent.
 
 ## High-resolution PNG
 
-- Default export width is 2880 px; preserve the source aspect ratio.
-- Save final images as RGB PNG with 300 DPI metadata and lossless compression.
-- Apply only restrained sharpening. Do not introduce halos, artificial HDR contrast, or text-edge artifacts.
-- Inspect a downscaled 360-430 px-wide preview as well as the full-resolution output. Text must remain legible on the phone preview, and the photograph must remain clear at full size.
+- Default export width is 2880 px; preserve source aspect ratio.
+- Save as RGB PNG with 300 DPI metadata and lossless compression.
+- Apply restrained sharpening only; avoid halos, artificial HDR contrast, and text-edge artifacts.
+- Inspect both the phone preview and full-resolution PNG.

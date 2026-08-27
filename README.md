@@ -1,304 +1,246 @@
-# 场景英语六图学习卡（Scene English Photo Pack）
+# 一景六学（Scene English Photo Pack）
 
-把 **1 张实景照片** 转换成 **6 张高清双语英语学习图**，适合看图学英语、四六级词汇积累和雅思口语/写作表达训练。
+把 **1 张实景照片**自动整理成 **6 张高清 PNG 英语学习卡**。适合中文母语者进行看图记词、四六级积累，以及雅思口语与写作训练。
 
-> 先说结论：这个仓库不是网页应用，不能在 GitHub 或 Gitee 页面里直接生成图片。GitHub 和 Gitee 用来保存、下载和更新 Skill；真正使用它的地方是 **Codex / ChatGPT 桌面端的 Codex、Codex CLI 或 Codex IDE 扩展**。
+> 这是 Codex Skill，不是网页应用。GitHub 和 Gitee 用来保存、安装和更新；真正生成图片的地方是 Codex 桌面端、Codex CLI 或 IDE 中的 Codex。
 
-## 这个 Skill 会生成什么
+## 本次重构带来了什么
 
-每次输入 1 张照片，连续生成 6 张使用同一底图的 PNG：
+- 手机可读字号：默认标签比旧版放大约 20%，图 6 描述文字放大约 14%。
+- 图 1 改成中文回忆卡：画面只显示中文，英文仍保留在内部数据中供图 2 精确复用。
+- 图 2 改成英文 + 单独一行英式 IPA + 中文，更容易阅读。
+- 自动防重叠：给定坐标只作为首选锚点；发生碰撞、越界或遮挡徽章时自动寻找最近空位。
+- 内容更丰富：情景搭配、四六级表达、雅思口语/写作句兼顾数量、自然度和可迁移性。
+- 自动检索本地资料：先生成紧凑主题索引，只读取相关页码或 JSON 命中，避免整本资料进入上下文，减少等待和 token 消耗。
+- 高清输出：默认宽度 2880 px，PNG 写入 300 DPI 元数据。
+- 所有标签保持直角、小块、散点分布，不使用圆角或大面积表格遮罩。
 
-1. **图 1：场景核心词汇**——基础场景名词和画面中的物品名词。
-2. **图 2：核心词汇与发音**——复用图 1 词汇，并补充英式 IPA 音标。
-3. **图 3：情景化短语**——自然、实用的动词短语和动宾搭配。
-4. **图 4：四六级表达**——适合 CET-4/CET-6 的进阶词汇与短语。
-5. **图 5：雅思口语/写作表达**——能迁移到 IELTS 答题中的句子和观点表达。
-6. **图 6：看图输出示范**——4–6 句英文场景描述及完整中文翻译。
+## 六张图分别学什么
 
-默认导出宽度为 **2880 px**，PNG 保存 **300 DPI** 元数据。图 1–5 使用分散的双层直角贴片，图 6 使用靠近画面顶部或底部的双语说明区。
+1. **图 1｜中文回忆**：只显示 8–14 个中文场景词或物品词。
+2. **图 2｜英文与发音**：按图 1 的相同顺序显示英文、英式 IPA 和中文答案。
+3. **图 3｜情景搭配**：8–12 个自然的动词短语、动宾搭配或服务用语。
+4. **图 4｜四六级表达**：8–12 个可用于 CET-4/CET-6 的词汇与短语。
+5. **图 5｜雅思表达**：6–9 条可迁移的 IELTS 口语句与写作句，并明确标注用途。
+6. **图 6｜看图输出**：5–6 句连贯英文描述及完整中文翻译。
 
-## 应该在哪里使用
+六张图片均使用同一张底图。图 1–5 使用分散的直角贴片；图 6 的说明区只放在顶部或底部的留白处。
+
+## 在哪里使用
 
 | 位置 | 能否使用 | 说明 |
 | --- | --- | --- |
-| Codex 桌面端 | 推荐 | 新建任务、上传照片、在提示词中调用 Skill。 |
-| ChatGPT 桌面端中的 Codex | 推荐 | 可以在 Skills 列表中找到并调用本 Skill。 |
+| Codex 桌面端 | 推荐 | 新建任务、上传 1 张照片并调用 Skill。 |
 | Codex CLI | 可以 | 安装后用 `$scene-english-photo-pack` 显式调用。 |
-| Codex IDE 扩展 | 可以 | 在编辑器的 Codex 对话中上传/引用图片并调用。 |
-| GitHub / Gitee 网页 | 不可以直接运行 | 这里只保存代码和安装文件。 |
-| 普通 Python 命令行 | 只能手动排版 | 渲染脚本不会自行识图、翻译或生成学习内容。 |
+| Codex IDE 扩展 | 可以 | 在编辑器内的 Codex 对话中调用。 |
+| GitHub / Gitee 网页 | 不能直接生成 | 只负责保存、安装和更新 Skill。 |
+| 普通 Python 命令行 | 只能排版 | 本地脚本不会代替模型识图和创作内容。 |
 
-OpenAI 官方说明：Skill 是包含 `SKILL.md`、可选脚本和参考资料的目录；Codex 可以显式调用，也可以根据任务描述自动选择。参见 [OpenAI 官方 Build skills 文档](https://developers.openai.com/codex/skills)。
+## 已安装时：三步开始
 
-## 你的电脑现在怎么用（最快方法）
+### 1. 上传照片
 
-如果 Codex 的 Skills 列表里已经显示 **“场景英语六图学习卡”**，说明已经安装，不需要再下载仓库。
+一次上传 **1 张** JPG、JPEG 或 PNG 实景照片。原始相机照片最好；截图也可以，但清理手机状态栏、搜索栏、头像、点赞、评论、水印等元素可能需要重绘。
 
-### 第 1 步：准备照片
+### 2. 发送最短提示词
 
-- 一次只上传 **1 张**照片。
-- 原始相机照片效果最好，JPG、JPEG、PNG 均可。
-- 可以上传手机截图；Skill 会尝试清理状态栏、搜索框、点赞评论按钮、账号昵称、水印和原有文字标签，但干净原图的效果更稳定。
-- 尽量选择主体清晰、光线正常、物品之间有一定空隙的照片。
+```text
+$scene-english-photo-pack 请把这张照片生成一套“一景六学”六张高清 PNG。自动分析场景，字号适合手机阅读，标签不得重叠。
+```
 
-### 第 2 步：打开 Codex 并上传照片
+不提供词汇也能生成。首次建议显式写出 Skill 名称；以后只说“把这张照片做成六张场景英语学习图”也可以自动匹配。
 
-1. 在 Codex 桌面端新建一个任务。
-2. 点击输入框附近的图片/附件按钮。
-3. 只选择这一次需要处理的实景照片。
-4. 等待缩略图出现在输入框中。
-
-### 第 3 步：复制下面的首次使用提示词
-
-场景描述和词汇列表可以不填；不填时，Skill 会根据照片自动分析并生成。
+### 3. 可选：提供场景和词汇
 
 ```text
 $scene-english-photo-pack
 
-请把我上传的 1 张照片制作成 6 张场景化英语学习图。
-
-场景描述：这是一家社区药店，货架上有常见药品和护理用品。
-
-希望优先使用的词汇：
-pharmacy, pharmacist, cold and flu tablets, eye drops, bandage,
-catch a cold, relieve the pain, reduce the risk of infection
-
-学习目标：雅思总分 7.5，写作和口语 6.5+；四六级与雅思表达要自然、实用，不要生硬堆砌高级词。
-
-请保持原图主体清晰，使用直角双层散点贴片；文本适合手机阅读，并输出 6 张高清 PNG。
+场景：独立咖啡店的操作台。
+优先词汇：意式咖啡机、磨豆机、复古冷藏柜、吊灯、装饰画、马克杯、手冲咖啡器具、台面。
+目标：雅思口语和写作 6.5+，四六级短语要实用、自然。
+请输出 6 张高清 PNG，自动防重叠。
 ```
 
-如果没有准备词汇，只需使用下面的简化版：
+词汇可以是中文、英文或中英混合。Skill 会分类、翻译、纠错并补充，不会机械照抄。
+
+## 如何检查结果
+
+正常输出应包含 `card-01.png` 至 `card-06.png`。请重点检查：
+
+- 图 1 是否只显示中文；
+- 图 2 是否按相同顺序给出英文、IPA 和中文；
+- 手机预览时是否不需要费力放大；
+- 标签之间是否有安全间距、没有压在一起或越界；
+- 标签是否尽量贴近相应物体，同时保留主体；
+- 图 5 是否同时有口语和写作表达；
+- 图 6 是否位于顶部或底部，而非遮住中心主体。
+
+需要微调时可直接说：
 
 ```text
-$scene-english-photo-pack 请分析我上传的照片，自行生成词汇和表达，并输出完整的 6 张高清学习图。标签使用直角边框，字号适合手机阅读。
+保留内容和底图，把标签再放大 8%，减少标签数量，并重新自动避让主体和其他文本框。
 ```
 
-### 第 4 步：等待并检查结果
+## 安装方法
 
-正常结果应该包含 `card-01.png` 到 `card-06.png`。重点检查：
+如果 Codex 的 Skills 列表里已经显示“一景六学”，请跳过安装。
 
-- 英文、音标和中文是否正确；
-- 标签是否贴近对应物体，但没有遮住主体；
-- 标签之间是否重叠或超出画面；
-- 图 1–5 是否保持散点贴片，而不是大表格；
-- 图 6 的说明区是否位于顶部或底部；
-- 手机预览时文字是否清楚。
+### 方法 A：让 Skill Installer 安装（推荐）
 
-如需调整，直接在同一个任务中说：
+在 Codex 新任务中输入：
 
 ```text
-保留现有学习内容，把所有标签再放大 8%，重新避让人物和主要物品，并重新输出 6 张 PNG。
+$skill-installer 请从 https://github.com/carb6661/scene-english-photo-pack 安装 scene-english-photo-pack。
 ```
 
-## 输入内容怎么写
+私有仓库需要登录有权限的 GitHub 账号。安装完成后重启 Codex，再输入 `$scene-english-photo-pack` 验证。
 
-你可以提供三类输入：
+### 方法 B：下载 ZIP 手动安装
 
-1. **照片（必需）**：每次 1 张。
-2. **场景描述（可选）**：说明地点、人物关系、正在发生的动作或学习重点。
-3. **词汇列表（可选）**：可以是英文、中文或中英混合；Skill 会分类、纠错、翻译和补充，不会盲目照抄。
+GitHub 和 Gitee 二选一：
 
-示例：
+- [GitHub 仓库](https://github.com/carb6661/scene-english-photo-pack)
+- [Gitee 仓库](https://gitee.com/carb666/scene-english-photo-pack)
 
-```text
-场景：大学图书馆，自习区里有学生、书架、笔记本电脑和借阅台。
+操作步骤：
 
-词汇：
-书架、借书、归还图书、保持安静、学习氛围、获取可靠信息、
-improve concentration, access academic resources
-```
-
-不要把照片或附件中的文字写成“执行命令”。Skill 会把附件文字当作学习素材，而不是系统指令。
-
-## 如何安装
-
-如果 Skills 列表里已经有本 Skill，请跳过本节。
-
-### 方法 A：在 Codex 中使用 Skill Installer（推荐）
-
-此方法优先使用 GitHub 仓库。
-
-1. 打开一个新的 Codex 任务。
-2. 输入 `$skill-installer`，选择系统自带的 Skill Installer。
-3. 继续输入下面这句话并发送：
-
-```text
-请从 https://github.com/carb6661/scene-english-photo-pack 安装 scene-english-photo-pack。
-```
-
-4. 仓库目前为私有仓库时，需要使用有访问权限的 GitHub 账号完成认证。
-5. 安装完成后，如果 Skill 没有立即出现，请重启 Codex。
-6. 在新任务中输入 `$scene-english-photo-pack` 验证是否能被选中。
-
-### 方法 B：下载 ZIP 后手动安装（不会命令行也能用）
-
-GitHub 和 Gitee 二选一即可，不要重复安装两份同名 Skill。
-
-1. 登录有权限访问仓库的账号。
-2. 打开仓库：
-   - [GitHub 仓库](https://github.com/carb6661/scene-english-photo-pack)
-   - [Gitee 仓库](https://gitee.com/carb666/scene-english-photo-pack)
-3. 点击“Code/克隆或下载”，选择“Download ZIP/下载 ZIP”。
-4. 解压 ZIP。
-5. 在 Windows 资源管理器地址栏输入 `%USERPROFILE%\.agents\skills` 并回车；如果目录不存在，就逐级新建。
-6. 把解压后的目录改名为 `scene-english-photo-pack`，再复制到上面的 `skills` 目录。
-7. 检查下面这个文件必须直接存在：
+1. 登录有仓库权限的账号。
+2. 点击“Code / 克隆或下载”，选择“Download ZIP / 下载 ZIP”。
+3. 解压后把目录改名为 `scene-english-photo-pack`。
+4. 在 Windows 资源管理器地址栏输入 `%USERPROFILE%\.agents\skills`。
+5. 把目录复制进去。
+6. 确认文件直接位于：
 
 ```text
 %USERPROFILE%\.agents\skills\scene-english-photo-pack\SKILL.md
 ```
 
-不要出现多套一层目录的情况，例如：
+不要多套一层目录。复制完成后重启 Codex。
 
-```text
-错误：...\scene-english-photo-pack\scene-english-photo-pack-main\SKILL.md
-正确：...\scene-english-photo-pack\SKILL.md
-```
+### 方法 C：Git 克隆
 
-8. 重启 Codex，然后输入 `$scene-english-photo-pack`。
-
-### 方法 C：使用 Git 克隆
-
-先在 PowerShell 中创建个人 Skill 目录：
+在 PowerShell 中运行：
 
 ```powershell
 $skillRoot = Join-Path $HOME ".agents\skills"
 New-Item -ItemType Directory -Force -Path $skillRoot | Out-Null
-```
-
-然后从 GitHub 或 Gitee 二选一：
-
-```powershell
-# GitHub
 git clone https://github.com/carb6661/scene-english-photo-pack.git (Join-Path $skillRoot "scene-english-photo-pack")
 ```
 
-```powershell
-# Gitee
-git clone https://gitee.com/carb666/scene-english-photo-pack.git (Join-Path $skillRoot "scene-english-photo-pack")
+也可把地址换成：
+
+```text
+https://gitee.com/carb666/scene-english-photo-pack.git
 ```
 
-私有仓库通常会要求登录、Personal Access Token 或已配置的 Git 凭据。完成后重启 Codex。
-
-以后更新 Skill：
+以后更新：
 
 ```powershell
 git -C (Join-Path $HOME ".agents\skills\scene-english-photo-pack") pull
 ```
 
-## 如何使用本地雅思资料库
+## 自动检索资料与低 token 模式
 
-本 Skill 可以在当前工作区存在资料时，按照片主题参考相关内容，尤其包括：
+当当前工作区存在词汇书、雅思语料或 JSON 词库时，Skill 会先运行紧凑检索器：
 
-```text
-English for Everyone English Vocabulary Builder (Dorling Kindersley, Inc.) (Z-Library).pdf
+```powershell
+python scripts/retrieve_topic_sources.py --workspace "E:\雅思" --keywords coffee cafe beverage 咖啡 --max-pages 6 --max-json-hits 8
 ```
 
-使用方法：
+它只返回：
 
-1. 把你合法持有的 PDF 放在当前 Codex 工作区或其子目录中。
-2. 不要把整本 PDF 复制到 Skill 仓库，也不要上传到 GitHub/Gitee。
-3. 在提示词中写明：
+- 与主题相关的本地资料路径；
+- `English for Everyone English Vocabulary Builder` 的少量相关页码；
+- IELTS 写作、口语与词库 JSON 的少量命中。
 
-```text
-请参考当前工作区中的 English for Everyone English Vocabulary Builder，
-只提取与本次照片主题相关的词汇组织方式，并加强四六级和雅思表达。
-```
+这样可以避免反复扫描目录，也避免把整本 PDF 或大型 JSON 放进模型上下文。Skill 只读取本次任务真正需要的页码或记录；没有本地资料时会直接使用照片和用户输入，不会阻塞生成。
 
-Skill 会参考主题组织、视觉词汇和实用表达，不会复制原书页面设计，也不会把原始资料打包进输出。
+请勿把你个人持有的参考书、原照片或输出图片提交到公开仓库。
 
-## 高级用法：只运行本地排版脚本
+## 高级用法：只运行本地排版
 
-这一部分适合了解 Python 的用户。脚本只负责把已经准备好的 `content.json` 排版到照片上，不会自动识别场景或创作学习内容。
+排版脚本需要一张清理后的照片和符合 [内容格式规范](references/content-schema.md) 的 UTF-8 `content.json`。
 
-### 1. 安装依赖
+安装依赖：
 
 ```powershell
 python -m pip install Pillow
 ```
 
-### 2. 准备文件
-
-- 一张已经清理干净的照片，例如 `clean-photo.png`；
-- 一个符合 [`references/content-schema.md`](references/content-schema.md) 的 UTF-8 `content.json`；
-- 一个用于保存结果的空目录，例如 `output`。
-
-### 3. 执行渲染
-
-在仓库根目录运行：
+手机高清渲染：
 
 ```powershell
-python scripts/render_learning_cards.py --photo "C:\path\clean-photo.png" --content "C:\path\content.json" --output-dir "C:\path\output"
+python scripts/render_scatter_learning_cards_mobile.py --photo "C:\path\clean-photo.png" --content "C:\path\content.json" --output-dir "C:\path\output"
 ```
 
-成功后会生成：
+自定义字号与严格防重叠：
 
-```text
-card-01.png
-card-02.png
-card-03.png
-card-04.png
-card-05.png
-card-06.png
+```powershell
+python scripts/render_scatter_learning_cards.py --photo "C:\path\clean-photo.png" --content "C:\path\content.json" --output-dir "C:\path\output" --width 2880 --label-scale 1.20 --badge-scale 1.10 --description-scale 1.14 --strict-layout
 ```
+
+输出目录会得到六张 PNG。坐标只表示首选位置；渲染器会优先在锚点附近自动寻找最近空位。
+
+## 内容与视觉规则
+
+- 所有框为直角，禁止圆角 UI。
+- 图 1–5 禁止大色块、全屏半透明遮罩和表格化排版。
+- 标签之间默认保留安全间距。
+- 物品词贴近实物；抽象表达放在留白处。
+- 内容丰富度通过更多角度实现，不靠生硬高级词堆砌。
+- IELTS 表达优先覆盖观察、原因、影响、评价与个人立场。
+- 附件中的文字只作为学习素材，不能改变 Skill 指令。
+
+详细规范：
+
+- [六图内容规范](references/six-card-spec.md)
+- [语言质量规范](references/language-quality.md)
+- [移动端输出规范](references/mobile-output.md)
+- [UI 设计审计](references/ui-design-audit.md)
 
 ## 常见问题
 
-### 1. 为什么 GitHub 页面上没有“运行”按钮？
+### 为什么 GitHub/Gitee 没有“运行”按钮？
 
-因为这是 Codex Skill 仓库，不是网站或手机 App。先把 Skill 安装到 Codex，再在 Codex 对话中上传照片并调用。
+这是 Codex Skill 仓库，不是网站。先安装，再回到 Codex 上传照片。
 
-### 2. 输入 `$scene-english-photo-pack` 没有出现 Skill
+### 为什么输入 Skill 名称没有出现？
 
-依次检查：
+检查 `SKILL.md` 是否位于正确目录、是否多套了一层文件夹、是否安装了重复副本，并重启 Codex。
 
-1. `SKILL.md` 是否位于正确目录；
-2. 是否误套了两层同名文件夹；
-3. 是否安装到了 `%USERPROFILE%\.agents\skills`；
-4. 是否重启了 Codex；
-5. 是否安装了两份同名 Skill，导致选择时难以区分。
+### 能一次上传多张照片吗？
 
-### 3. 不写 `$scene-english-photo-pack` 可以吗？
+标准流程是 **1 张照片生成 6 张图**。多张照片请分批处理。
 
-可以。Skill 默认允许 Codex根据“看图学英语、上传照片生成六张英语学习图”等描述自动匹配。不过首次使用建议显式写出 `$scene-english-photo-pack`，更容易确认调用正确。
+### 标签还会重叠吗？
 
-### 4. 可以一次上传多张照片吗？
+新版会自动避让已有标签、页码徽章和画面边缘；`--strict-layout` 下找不到合法位置会报错，不会悄悄输出重叠图。内容极多时，Skill 会优先减少低价值标签，而不是缩小到看不清。
 
-不建议。本 Skill 的一次标准任务是 **1 张照片生成 6 张学习图**。多张照片请分成多个任务或逐张生成。
+### 为什么图 1 没有英文？
 
-### 5. 为什么文字仍然太小或遮住物品？
+这是刻意设计的“中文提示—英文回忆”步骤。图 2 会用完全相同的词汇和顺序显示英文与 IPA。
 
-继续在原任务中提出明确修改，例如：
+### 输出是否真的更清晰？
 
-```text
-保持六张图的内容不变，把标签整体放大 10%，减少每张图的标签数量，
-并把遮住商品和人物的标签移动到墙面、地面或货架空隙处。
-```
-
-### 6. GitHub/Gitee 提示无权限或仓库不存在
-
-仓库是私有状态时，未登录或没有权限的账号可能看不到。请先登录仓库所属账号，或为使用者授予仓库访问权限。
-
-### 7. 会修改我的原照片吗？
-
-不会。Skill 要求保留原始文件，清理和排版都写入新的输出图片。
+移动端默认输出宽度 2880 px，并写入 300 DPI 元数据。最终清晰度仍受原图质量和平台二次压缩影响。
 
 ## 仓库结构
 
 ```text
 scene-english-photo-pack/
-├─ SKILL.md                 # Skill 的入口、触发范围和工作流
-├─ agents/openai.yaml       # Codex 中显示的名称、简介和默认提示词
-├─ scripts/                 # 六图 PNG 排版脚本
-├─ references/              # 内容、语言、UI、移动端和 JSON 规范
-└─ README.md                # 当前使用说明
+├─ SKILL.md
+├─ agents/openai.yaml
+├─ scripts/
+│  ├─ retrieve_topic_sources.py
+│  ├─ render_scatter_learning_cards.py
+│  └─ render_scatter_learning_cards_mobile.py
+├─ references/
+└─ README.md
 ```
 
-## 隐私与版权提醒
+## 隐私与版权
 
-- 只上传你有权使用的照片和学习资料。
-- 照片中如有身份证件、住址、手机号、人脸或其他敏感信息，请先自行遮挡。
-- 本仓库不包含用户的 IELTS 资料库、原始照片或生成结果。
-- 参考书仅用于用户本地、与当前主题相关的学习加工，不应随 Skill 仓库重新分发。
-
+- 只上传你有权使用的照片和资料。
+- 照片含人脸、地址、证件或手机号时，请先遮挡。
+- 原始参考资料仅用于本地主题检索，不随 Skill 重新分发。
+- 输出会写入新文件，不覆盖原照片。
