@@ -1,0 +1,40 @@
+name: Validate skill
+
+on:
+  push:
+    branches:
+      - main
+      - refactor/**
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install test dependencies
+        run: python -m pip install Pillow PyYAML
+      - name: Compile Python
+        run: python -m compileall -q scripts tests
+      - name: Run layout regression tests
+        run: python -m unittest discover -s tests -v
+      - name: Check skill metadata
+        shell: pwsh
+        run: |
+          $skill = Get-Content -LiteralPath SKILL.md -Raw
+          if ($skill -notmatch '(?s)^---\s*\r?\nname:\s*scene-english-photo-pack\s*\r?\ndescription:') {
+            throw 'SKILL.md frontmatter is missing or invalid'
+          }
+          $yaml = Get-Content -LiteralPath agents/openai.yaml -Raw
+          if ($yaml -notmatch 'display_name:\s*"一景六学"') {
+            throw 'agents/openai.yaml display name is incorrect'
+          }
