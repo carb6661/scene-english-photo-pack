@@ -1,58 +1,71 @@
 # Six-image scattered-label specification
 
-Use the same clean photo on all six pages. The progression changes the language, not the photographic base.
+Use one clean photograph for all six pages. The learning depth changes; the photographic base does not.
 
 ## Non-negotiable visual contract
 
-- The final images contain only the real-world scene, a small page badge, and learning labels. No phone UI, app chrome, watermark, social interface, caption, or pre-existing label may remain.
-- Cards 1-5 use compact floating patches only. Each patch has a square-corner warm-white English/IPA strip above a square-corner black Chinese strip.
-- Labels must be spatially scattered, not aligned into rows, columns, a grid, or a table. Never add a full-screen tint, large opaque content panel, dashboard, or document-like page over the photo.
-- Object labels sit immediately beside visible referents without covering object centres. Higher-level language uses genuine architectural or environmental whitespace.
-- Preserve the original focal path and keep at least half of the photograph unobstructed.
-- Use one restrained system across all pages: warm white, near-black, white, restrained shadow, 8 px-derived spacing, and no rounded corners.
-- A small two-layer page badge may appear near an outer corner. It must not become a title bar.
+- Final images contain only the scene, a small page badge, and learning labels. Remove phone UI, app chrome, watermarks, social controls, captions, borders, and old learning labels.
+- Card 1 uses compact square black Chinese recall prompts. Cards 2-5 use square warm-white English/IPA surfaces above square black Chinese surfaces.
+- Card 2 places IPA on its own line. Never squeeze English and IPA into one crowded line.
+- Labels remain scattered, never aligned as a table or grid. Preserve at least half of the photograph unobstructed.
+- Object labels stay near visible referents; inferred actions and advanced language use environmental whitespace.
+- Mobile typography is deliberately larger than the original design. Reduce wording or item count before shrinking below the recommended range.
+- Automatic collision repair is mandatory. Treat touching safety margins as a conflict, search near the requested anchor first, and fail only when no readable position exists.
+- Use warm white, near-black, white, muted IPA grey, restrained shadow, 8 px-derived spacing, and zero rounded corners.
 
-## Card 1 — Scene vocabulary
+## Card 1 — 中文场景提示
 
-- Title: `场景核心词汇 | Scene vocabulary`.
-- Extract 8-16 basic scene nouns and visible object nouns from the user's list and photo.
-- Render English plus concise Chinese. Place each label beside its corresponding object where possible.
+- Title: `中文场景提示 | Chinese recall prompts`.
+- Select 8-14 visible or central scene nouns.
+- Keep English in `content.json` for Card 2 matching, but display only the Chinese translation.
+- Use this as active recall: the learner sees the object and Chinese prompt before revealing English.
 
 ## Card 2 — Vocabulary with pronunciation
 
 - Title: `核心词汇与发音 | Vocabulary & pronunciation`.
-- Reuse Card 1 terms in the same conceptual order.
-- Add accurate slash-delimited British IPA after every English term. Omit rather than invent uncertain IPA.
-- Keep Chinese on the black lower strip.
+- Reuse Card 1 terms in exactly the same order.
+- Show English, slash-delimited British IPA on a separate line, and Chinese.
+- Omit rather than invent uncertain IPA.
 
 ## Card 3 — Situational phrases
 
 - Title: `情景化短语 | Situational phrases`.
-- Create 6-12 natural verb phrases, verb-object combinations, or common scene collocations.
-- Prefer immediately usable language such as service interactions and ordinary actions.
-- Scatter phrases through visual whitespace; do not pretend that an inferred action is a visible object.
+- Normally provide 8-12 natural actions, service exchanges, or verb-object collocations.
+- Balance immediate visible actions with ordinary scene functions; do not present inference as visible fact.
 
 ## Card 4 — CET-4/6 language
 
 - Title: `四六级可用单词和短语 | CET-4/6 language`.
-- Provide 6-12 useful B1-B2 words and phrases, including a balanced mix of nouns, collocations, cause/effect, problem/solution, or evaluation language when supported.
-- Favor practical expressions over ornamental rare words.
+- Normally provide 8-12 useful B1-B2 items.
+- Include a balanced mix of topic nouns, collocations, cause/effect, problem/solution, and evaluation where supported.
+- Prefer transferable language over rare decorative vocabulary.
 
 ## Card 5 — IELTS speaking and writing
 
 - Title: `雅思口语 / 写作表达 | IELTS expressions`.
-- Provide 5-9 accurate B2-C1 sentence frames, viewpoint statements, or topic-specific long expressions.
-- Long labels may be wider, but must remain separate floating patches at the top, bottom, or large whitespace regions. Never stack them into one central block.
-- Mark `[口语]` or `[写作]` in the English strip when register could be confused.
+- Normally provide 6-9 accurate B2-C1 expressions, including at least three speaking and three writing items when space allows.
+- Use ASCII markers `[Speaking]` and `[Writing]` in the English strip to avoid missing-glyph boxes.
+- Include natural personal detail for Speaking and controlled, defensible claims for Writing.
+- Long labels remain separate floating patches; shorten before shrinking.
 
 ## Card 6 — Model description
 
 - Title: `看图输出示范 | Model description`.
-- Write one coherent 4-6 sentence English description followed by a complete natural Chinese translation.
-- Move from scene overview to visible detail and practical significance. Reuse useful language from earlier pages without mechanically listing every object.
-- Render the English and Chinese as one coordinated panel docked only to the top or bottom edge. Use warm-white and black surfaces with mild transparency and restrained shadow.
-- The panel may occupy at most 36% of image height and must never sit over the centre focal subject. Square corners remain mandatory.
+- Write 5-6 coherent English sentences plus a complete natural Chinese translation.
+- Move from overview to visible detail, plausible activity, and practical or social significance.
+- Dock the coordinated bilingual panel only at the top or bottom; keep it outside the central focal subject and at or below 36% of image height.
+
+## Richness without clutter
+
+Across Cards 3-5, cover more than object naming:
+
+- preparation or action language;
+- human, service, or customer interaction;
+- quality, maintenance, sustainability, access, convenience, or atmosphere where relevant;
+- at least one reusable cause-effect or evaluation frame.
+
+Do not add unsupported ideas merely to reach a count. When larger text and richer content compete, preserve readability and reduce density.
 
 ## Final audit
 
-Reject and revise any page when labels overlap, clip, obscure central objects, form a table-like alignment, cover more than half of the photo, use inconsistent styling, contain inaccurate English/IPA/Chinese, or leave any source UI visible.
+Reject and revise any page with overlap, touching labels, clipping, tofu characters, inaccurate English/IPA/Chinese, central-object obstruction, table-like alignment, or more than half the image covered.
