@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from pathlib import Path
 from typing import Iterable
 
@@ -113,7 +114,14 @@ def scan_json(path: Path, keywords: list[str], remaining: int) -> list[dict]:
     return hits
 
 
+def configure_utf8_stdout() -> None:
+    reconfigure = getattr(sys.stdout, "reconfigure", None)
+    if callable(reconfigure):
+        reconfigure(encoding="utf-8", errors="replace")
+
+
 def main() -> None:
+    configure_utf8_stdout()
     args = parse_args()
     workspace = args.workspace.resolve()
     if not workspace.is_dir():
